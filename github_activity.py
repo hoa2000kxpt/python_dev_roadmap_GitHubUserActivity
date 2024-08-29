@@ -9,8 +9,9 @@ def fetch_user_activity(username):
     try:
         # Make a request to the GitHub API
         with urllib.request.urlopen(url) as response:
-            data = response.read().decode("utf-8")
-            events = json.load(data)
+            data = response.read().decode()
+            events = json.loads(data)
+
 
             if len(events) == 0:
                 print(f"No recent activity found for {username}")
@@ -38,3 +39,19 @@ def fetch_user_activity(username):
             print("User not found. Please check the username and try again.")
         elif e.code == 403:
             print("API rate limit exceeded. Please try again later.")
+        else:
+            print(f"HTTP Error: {e.code}")
+    except urllib.error.URLError as e:
+        print(f"Failed to connect to the GitHub API: {e.reason}")
+    except json.JSONDecodeError:
+        print("Failed to parse the response from the GitHub API.")
+
+def main():
+    parser = argparse.ArgumentParser(description="Fetch recent GitHub user activity.")
+    parser.add_argument("username", help="GitHub username")
+    args = parser.parse_args()
+
+    fetch_user_activity(args.username)
+
+if __name__ == "__main__":
+    main()
