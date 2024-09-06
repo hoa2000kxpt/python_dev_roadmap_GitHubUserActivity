@@ -2,6 +2,7 @@ import argparse
 import urllib.request
 import json
 
+
 # Function to fetch user activity from GitHub API
 def fetch_user_activity(username):
     url = f"https://api.github.com/users/{username}/events/public"
@@ -11,7 +12,6 @@ def fetch_user_activity(username):
         with urllib.request.urlopen(url) as response:
             data = response.read().decode()
             events = json.loads(data)
-
 
             if len(events) == 0:
                 print(f"No recent activity found for {username}")
@@ -46,12 +46,14 @@ def fetch_user_activity(username):
     except json.JSONDecodeError:
         print("Failed to parse the response from the GitHub API.")
 
+
 def main():
     parser = argparse.ArgumentParser(description="Fetch recent GitHub user activity.")
     parser.add_argument("username", help="GitHub username")
     args = parser.parse_args()
 
     fetch_user_activity(args.username)
+
 
 if __name__ == "__main__":
     main()
